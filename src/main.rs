@@ -12,6 +12,11 @@ mod tables;
 mod colour_functions;
 mod patterns;
 
+use colour_functions::{ christmas_wheel, fade };
+use apa106led::{ Apa106Led, WARM_WHITE, OFF };
+use cube::{ Cube4, Voxel };
+use patterns::{ MAX_BRIGHTNESS };
+
 fn create_spi() -> io::Result<Spidev> {
 	let mut spi = try!(Spidev::open("/dev/spidev0.0"));
 	let options = SpidevOptions::new()
@@ -24,27 +29,28 @@ fn create_spi() -> io::Result<Spidev> {
 }
 
 /// perform half duplex operations using Read and Write traits
-fn half_duplex(spi: &mut Spidev) -> io::Result<()> {
+/*fn half_duplex(spi: &mut Spidev) -> io::Result<()> {
 	try!(spi.write(&[
 		0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC,
 	 	0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC,
 	   	0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC,
 	]));
 	Ok(())
-}
+}*/
 
 fn main() {
 
-	println!("{:?}", half_duplex(&mut spi).unwrap());
+	//println!("{:?}", half_duplex(&mut spi).unwrap());
+	run();
 }
 
 
-fn run(args: &pt::run_args) {
+fn run() {
 	println!("Started\r\n");
 
-	let spi = create_spi().unwrap();
+	let mut spi = create_spi().unwrap();
 
-	let mut cube = Cube4::new(&spi);
+	let mut cube = Cube4::new(&mut spi);
 
 	cube.fill(Apa106Led { red: 2, green: 0, blue: 0 });
 
@@ -57,9 +63,9 @@ fn run(args: &pt::run_args) {
 
 	loop {
 		// Rainbow
-		for _ in 0..4 {
+		/*for _ in 0..4 {
 			patterns::christmas_rainbow(&mut cube);
-		}
+		}*/
 
 		// Fadey slices thing
 		for _ in 0..4 {

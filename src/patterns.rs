@@ -6,7 +6,7 @@ use std::{thread, time};
 use colour_functions::{ christmas_wheel, fade };
 use apa106led::{ Apa106Led, WARM_WHITE, OFF };
 use cube::{ Cube4, Voxel };
-use rand::{ rand_range };
+use rand::{ self, Rng };
 
 pub const MAX_BRIGHTNESS: u8 = 25;
 
@@ -15,7 +15,7 @@ pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 
 	// Spawn some new raindrops
 	for index in 0..16 {
-		cube.set_at_index((index + 16 * 3) as usize, if rand_range(0, 64) < 16 { raindrop_colour } else { OFF });
+		cube.set_at_index((index + 16 * 3) as usize, if rand::thread_rng().gen_range(0, 100) < 16 { raindrop_colour } else { OFF });
 	}
 
 	cube.flush();
@@ -24,7 +24,7 @@ pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 
 	for _ in 0..4 {
 		// Move existing raindrops down
-		for z in (1..4) {
+		for z in 1..4 {
 			for x in 0..4 {
 				for y in 0..4 {
 					let current_position = Voxel { x: x, y: y, z: z };
@@ -61,7 +61,7 @@ pub fn christmas_rainbow(cube: &mut Cube4) {
 
 pub fn animated_slices(cube: &mut Cube4) {
 	// const FRAME_TIME: u32 = 40;
-	let FRAME_TIME = time::Duration::from_millis(40);
+	let FRAME_TIME = time::Duration::from_millis(5);
 
 	// Fade red panels up
 	for panel in 0..4 {

@@ -1,4 +1,6 @@
 use spidev::Spidev;
+use std::io;
+use std::io::prelude::*;
 
 use apa106led::Apa106Led;
 
@@ -13,13 +15,13 @@ pub struct Voxel {
 }
 
 pub struct Cube4<'a> {
-	spi: &'a Spidev,
+	spi: &'a mut Spidev,
 
 	cube_frame: [Apa106Led; 64],
 }
 
 impl<'a> Cube4<'a> {
-	pub fn new(spi: &Spidev) -> Cube4 {
+	pub fn new(spi: &mut Spidev) -> Cube4 {
 		let blank_frame: [Apa106Led; 64] = [Apa106Led { red: 1, green: 0, blue: 0 }; 64];
 
 		Cube4 {
@@ -104,10 +106,10 @@ impl<'a> Cube4<'a> {
 		}
 	}
 
-	pub fn flush(&self) {
+	pub fn flush(&mut self) {
 		for led in self.cube_frame.into_iter() {
 			for byte in colour_to_raw(led).into_iter() {
-				self.spi.write(*byte);
+				self.spi.write(&[ *byte ]);
 			}
 		}
 	}
