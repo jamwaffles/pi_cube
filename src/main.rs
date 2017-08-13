@@ -14,7 +14,7 @@ mod patterns;
 
 use colour_functions::{ christmas_wheel, fade };
 use apa106led::{ Apa106Led, WARM_WHITE, OFF };
-use cube::{ Cube4, Voxel };
+use cube::{ Cube4 };
 use patterns::{ MAX_BRIGHTNESS };
 
 fn create_spi() -> io::Result<Spidev> {
@@ -52,34 +52,56 @@ fn run() {
 
 	let mut cube = Cube4::new(&mut spi);
 
-	cube.fill(Apa106Led { red: 2, green: 0, blue: 0 });
+	//cube.fill(Apa106Led { red: 0, green: 5, blue: 0 });
+	cube.fill(OFF);
 
 	cube.flush();
 	thread::sleep(time::Duration::from_millis(1));
 
 	let raindrop_colour = fade(WARM_WHITE, MAX_BRIGHTNESS as f32 / 255.0);
 
-	let mut counter = 0;
+	let wait_time = time::Duration::from_millis(500);
 
 	loop {
+		cube.fill(Apa106Led { red: 0, green: 5, blue: 0 });
+			cube.flush();
+		thread::sleep(wait_time);
+		cube.fill(OFF);
+			cube.flush();
+		thread::sleep(wait_time);
+		
+		cube.fill(Apa106Led { red: 5, green: 0, blue: 0 });
+			cube.flush();
+		thread::sleep(wait_time);
+		cube.fill(OFF);
+			cube.flush();
+		thread::sleep(wait_time);
+		
+		cube.fill(Apa106Led { red: 0, green: 0, blue: 5 });
+			cube.flush();
+		thread::sleep(wait_time);
+		cube.fill(OFF);
+			cube.flush();
+		thread::sleep(wait_time);
+		
 		// Rainbow
 		/*for _ in 0..4 {
 			patterns::christmas_rainbow(&mut cube);
 		}*/
 
 		// Fadey slices thing
-		for _ in 0..4 {
+		/*for _ in 0..4 {
 			patterns::animated_slices(&mut cube);
-		}
+		}*/
 
 		// Rain
-		for _ in 0..16 {
+		/*for _ in 0..16 {
 			patterns::rain(&mut cube, raindrop_colour);
-		}
+		}*/
 
 		// Blender
-		for _ in 0..16 {
+		/*for _ in 0..16 {
 			patterns::blender(&mut cube, raindrop_colour);
-		}
+		}*/
 	}
 }

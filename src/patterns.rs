@@ -61,7 +61,7 @@ pub fn christmas_rainbow(cube: &mut Cube4) {
 
 pub fn animated_slices(cube: &mut Cube4) {
 	// const FRAME_TIME: u32 = 40;
-	let FRAME_TIME = time::Duration::from_millis(5);
+	let FRAME_TIME = time::Duration::from_millis(40);
 
 	// Fade red panels up
 	for panel in 0..4 {

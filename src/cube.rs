@@ -107,11 +107,30 @@ impl<'a> Cube4<'a> {
 	}
 
 	pub fn flush(&mut self) {
+		let mut bytes = Vec::new();
+		
 		for led in self.cube_frame.into_iter() {
 			for byte in colour_to_raw(led).into_iter() {
-				self.spi.write(&[ *byte ]);
+				// self.spi.write(&[ *byte ]);
+				bytes.push(*byte);
 			}
 		}
+		
+		self.spi.write(&bytes.as_slice());
+		
+		/*let mut bytes: Vec<u8> = self.cube_frame
+			.into_iter()
+			.map(|led| {
+				colour_to_raw(led).into_iter().map(|byte| *byte).collect::<Vec<u8>>()
+			})
+			.flat_map(|thing| {
+				thing
+			})
+			.collect();
+			
+		// bytes.reverse();
+			
+		self.spi.write(&bytes.as_slice());*/
 	}
 }
 
