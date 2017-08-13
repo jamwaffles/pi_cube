@@ -1,0 +1,6 @@
+[package]
+authors = ["pi"]
+name = "apa106_spi"
+version = "0.1.0"
+[dependencies]
+spidev = "0.3.0"
