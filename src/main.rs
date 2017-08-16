@@ -21,7 +21,8 @@ fn create_spi() -> io::Result<Spidev> {
 	let mut spi = try!(Spidev::open("/dev/spidev0.0"));
 	let options = SpidevOptions::new()
 		 .bits_per_word(8)
-		 .max_speed_hz(4_678_362)
+		 // .max_speed_hz(4_678_362)
+		 .max_speed_hz(6_400_000)
 		 .mode(SPI_MODE_0)
 		 .build();
 	try!(spi.configure(&options));
@@ -63,7 +64,7 @@ fn run() {
 	let wait_time = time::Duration::from_millis(500);
 
 	loop {
-		cube.fill(Apa106Led { red: 0, green: 5, blue: 0 });
+		/*cube.fill(Apa106Led { red: 0, green: 5, blue: 0 });
 			cube.flush();
 		thread::sleep(wait_time);
 		cube.fill(OFF);
@@ -82,9 +83,10 @@ fn run() {
 		thread::sleep(wait_time);
 		cube.fill(OFF);
 			cube.flush();
-		thread::sleep(wait_time);
+		thread::sleep(wait_time);*/
 		
 		// Rainbow
+		// Still segfaults
 		/*for _ in 0..4 {
 			patterns::christmas_rainbow(&mut cube);
 		}*/
@@ -95,9 +97,9 @@ fn run() {
 		}*/
 
 		// Rain
-		/*for _ in 0..16 {
+		for _ in 0..16 {
 			patterns::rain(&mut cube, raindrop_colour);
-		}*/
+		}
 
 		// Blender
 		/*for _ in 0..16 {
