@@ -86,15 +86,14 @@ fn run() {
 		thread::sleep(wait_time);*/
 		
 		// Rainbow
-		// Still segfaults
-		/*for _ in 0..4 {
+		for _ in 0..4 {
 			patterns::christmas_rainbow(&mut cube);
-		}*/
+		}
 
 		// Fadey slices thing
-		/*for _ in 0..4 {
+		for _ in 0..4 {
 			patterns::animated_slices(&mut cube);
-		}*/
+		}
 
 		// Rain
 		for _ in 0..16 {
@@ -102,8 +101,8 @@ fn run() {
 		}
 
 		// Blender
-		/*for _ in 0..16 {
+		for _ in 0..16 {
 			patterns::blender(&mut cube, raindrop_colour);
-		}*/
+		}
 	}
 }
