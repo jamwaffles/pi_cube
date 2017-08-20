@@ -1,10 +1,7 @@
-// use zinc::hal::timer::Timer;
-// use zinc::hal::tiva_c::timer::{ Timer as TivaCTimer };
-
 use std::{thread, time};
 
 use colour_functions::{ christmas_wheel, fade };
-use apa106led::{ Apa106Led, WARM_WHITE, OFF };
+use apa106led::{ Apa106Led, OFF };
 use cube::{ Cube4, Voxel };
 use rand::{ self, Rng };
 
@@ -48,7 +45,7 @@ pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 pub fn christmas_rainbow(cube: &mut Cube4) {
 	for counter in 0..255 {
 		for index in 0..64 {
-			let pos: u16 = ((index * 4) + counter);
+			let pos: u16 = (index * 4) + counter;
 
 			let wheel_col = christmas_wheel(pos as u8);
 
@@ -62,8 +59,7 @@ pub fn christmas_rainbow(cube: &mut Cube4) {
 }
 
 pub fn animated_slices(cube: &mut Cube4) {
-	// const FRAME_TIME: u32 = 40;
-	let FRAME_TIME = time::Duration::from_millis(40);
+	let frame_time = time::Duration::from_millis(40);
 
 	// Fade red panels up
 	for panel in 0..4 {
@@ -72,7 +68,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 			cube.flush();
 
-			thread::sleep(FRAME_TIME);
+			thread::sleep(frame_time);
 		}
 	}
 
@@ -84,7 +80,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 		cube.flush();
 
-		thread::sleep(FRAME_TIME);
+		thread::sleep(frame_time);
 	}
 
 	// Fade green slices up
@@ -94,7 +90,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 			cube.flush();
 
-			thread::sleep(FRAME_TIME);
+			thread::sleep(frame_time);
 		}
 	}
 
@@ -106,7 +102,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 		cube.flush();
 
-		thread::sleep(FRAME_TIME);
+		thread::sleep(frame_time);
 	}
 
 	// Fade white layers  up
@@ -116,7 +112,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 			cube.flush();
 
-			thread::sleep(FRAME_TIME);
+			thread::sleep(frame_time);
 		}
 	}
 
@@ -128,7 +124,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 		cube.flush();
 
-		thread::sleep(FRAME_TIME);
+		thread::sleep(frame_time);
 	}
 }
 
@@ -137,7 +133,6 @@ pub fn blender(cube: &mut Cube4, fill_colour: Apa106Led) {
 		for i in 0..64 {
 			cube.set_at_index(i, Apa106Led { red: 0, green: 0, blue: 0 });
 
-			// timer.wait_us(1);
 			// 1 microsecond
 			thread::sleep(time::Duration::new(0, 1000));
 		}

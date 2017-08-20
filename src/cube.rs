@@ -1,6 +1,5 @@
 use spidev::Spidev;
-use std::io;
-use std::io::prelude::*;
+use std::io::Write;
 
 use apa106led::Apa106Led;
 
