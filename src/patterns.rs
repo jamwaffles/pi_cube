@@ -48,7 +48,9 @@ pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 pub fn christmas_rainbow(cube: &mut Cube4) {
 	for counter in 0..255 {
 		for index in 0..64 {
-			let wheel_col = christmas_wheel(((index * 4) + counter as u8) & 255);
+			let pos: u16 = ((index * 4) + counter);
+
+			let wheel_col = christmas_wheel(pos as u8);
 
 			cube.set_at_index(index as usize, fade(wheel_col, (MAX_BRIGHTNESS as f32 / 255.0)));
 		}
