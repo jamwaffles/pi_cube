@@ -6,3 +6,6 @@ version = "0.1.0"
 [dependencies]
 rand = "0.3.16"
 spidev = "0.3.0"
+
+[build-dependencies]
+bindgen = "0.26.3"
