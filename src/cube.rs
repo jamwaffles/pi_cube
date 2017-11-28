@@ -19,7 +19,7 @@ pub struct Voxel {
 }
 
 pub struct Cube4<'a> {
-	spi: &'a mut Spidev,
+	hw: &'a mut Spidev,
 
 	cube_frame: [Apa106Led; 64],
 }
@@ -29,7 +29,7 @@ impl<'a> Cube4<'a> {
 		let blank_frame: [Apa106Led; 64] = [Apa106Led { red: 1, green: 0, blue: 0 }; 64];
 
 		Cube4 {
-			spi: spi,
+			hw: spi,
 
 			cube_frame: blank_frame
 		}
@@ -120,15 +120,15 @@ impl<'a> Cube4<'a> {
 
 		let mut clear: Vec<u8> = (0..5000).map(|b| 0x00).collect();
 
-		// self.spi.write(&clear.as_slice());
+		// self.hw.write(&clear.as_slice());
 		// thread::sleep(Duration::from_millis(100));
 
-		// self.spi.write(&clear.as_slice());
+		// self.hw.write(&clear.as_slice());
 
 		// thread::sleep(time::Duration::from_millis(200));		
 			
-		// self.spi.write(&bytes.as_slice());
-		self.spi.write(&bytes[0..(24 * 8)]);
+		// self.hw.write(&bytes.as_slice());
+		self.hw.write(&bytes[0..(24 * 8)]);
 
 		thread::sleep(time::Duration::from_millis(200));
 	}
