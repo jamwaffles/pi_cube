@@ -46,7 +46,7 @@ fn run() {
 	// 	pub desc: *mut ::std::os::raw::c_char,
 	// }
 
-	let mut foo = vec![ 0x10200000u32, 0x10200000u32, 0x00002000u32, 0x00002000u32 ];
+	let mut foo = vec![ 0x00200000u32, 0x00200000, 0x00200000, 0x00200000 ];
 
 	unsafe {
 		let mut ledstring = ws2811::get_strings();

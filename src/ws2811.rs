@@ -4,6 +4,8 @@
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
+use std::ptr;
+
 pub fn get_strings() -> ws2811_t {
 	unsafe {
 		let hw = rpi_hw_detect();
@@ -28,13 +30,13 @@ pub fn get_strings() -> ws2811_t {
 					count: 4,
 					invert: 0,
 					brightness: 32,
-					strip_type: (WS2811_STRIP_BGR as i32),
+					strip_type: (WS2811_STRIP_RGB as i32),
 					leds: &mut 0,
 					wshift: 0,
 					rshift: 0,
 					gshift: 0,
 					bshift: 0,
-					gamma: &mut 0,
+					gamma: ptr::null_mut(),
 				},
 				ws2811_channel_t {
 					gpionum: 0,
@@ -47,7 +49,7 @@ pub fn get_strings() -> ws2811_t {
 					rshift: 0,
 					gshift: 0,
 					bshift: 0,
-					gamma: &mut 0,
+					gamma: ptr::null_mut(),
 				}
 			]
 		};
