@@ -5,7 +5,7 @@ use apa106led::{ Apa106Led, OFF };
 use cube::{ Cube4, Voxel };
 use rand::{ self, Rng };
 
-pub const MAX_BRIGHTNESS: u8 = 25;
+pub const MAX_BRIGHTNESS: u8 = 250;
 
 pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 	let wait = time::Duration::from_millis(120);

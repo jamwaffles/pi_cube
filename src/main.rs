@@ -20,8 +20,11 @@ fn create_spi() -> io::Result<Spidev> {
 	let mut spi = try!(Spidev::open("/dev/spidev0.0"));
 	let options = SpidevOptions::new()
 		 .bits_per_word(8)
+		 // .lsb_first(false)
 		 .max_speed_hz(6_400_000)
-		 .mode(SPI_MODE_0)
+		 // .max_speed_hz(1_920_000)
+		 // .max_speed_hz(5_120_000)
+		 .mode(spidev::SPI_MODE_0)
 		 .build();
 	try!(spi.configure(&options));
 	Ok(spi)

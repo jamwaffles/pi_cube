@@ -1,10 +1,15 @@
 use spidev::Spidev;
 use std::io::Write;
+use std::{thread, time};
+use std::time::Duration;
 
 use apa106led::Apa106Led;
 
-const ON_BYTE: u8 = 0b1111_1100;
-const OFF_BYTE: u8 = 0b1100_0000;
+// const ON_BYTE: u8 = 0b1111_1100;
+// const OFF_BYTE: u8 = 0b1100_0000;
+
+const ON_BYTE: u8 = 0b1110_0000;
+const OFF_BYTE: u8 = 0b1000_0000;
 
 #[derive(Copy, Clone)]
 pub struct Voxel {
@@ -105,14 +110,27 @@ impl<'a> Cube4<'a> {
 		}
 	}
 
+	// #[inline(always)]
 	pub fn flush(&mut self) {
 		let mut bytes: Vec<u8> = self.cube_frame
 			.into_iter()
 			.map(|led| colour_to_raw(led).into_iter().map(|byte| *byte).collect::<Vec<u8>>())
 			.flat_map(|thing| thing)
 			.collect();
+
+		let mut clear: Vec<u8> = (0..5000).map(|b| 0x00).collect();
+
+		// self.spi.write(&clear.as_slice());
+		// thread::sleep(Duration::from_millis(100));
+
+		// self.spi.write(&clear.as_slice());
+
+		// thread::sleep(time::Duration::from_millis(200));		
 			
-		self.spi.write(&bytes.as_slice());
+		// self.spi.write(&bytes.as_slice());
+		self.spi.write(&bytes[0..(24 * 8)]);
+
+		thread::sleep(time::Duration::from_millis(200));
 	}
 }
 
