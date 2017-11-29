@@ -16,6 +16,16 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header("./wrapper.h")
+
+        .whitelisted_type("ws2811_t")
+        .whitelisted_type("ws2811_device")
+        .whitelisted_type("ws2811_channel_t")
+        .whitelisted_var("WS2811_STRIP_RGB")
+
+        .whitelisted_function("ws2811_init")
+        .whitelisted_function("ws2811_render")
+        .whitelisted_function("rpi_hw_detect")
+
         .clang_arg("-Iws2811")
         // Finish the builder and generate the bindings.
         .generate()
