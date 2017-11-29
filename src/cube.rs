@@ -2,7 +2,9 @@ use spidev::Spidev;
 use std::io::Write;
 use std::{thread, time};
 use std::time::Duration;
+use std::ptr;
 
+use ws2811;
 use apa106led::Apa106Led;
 
 // const ON_BYTE: u8 = 0b1111_1100;
@@ -18,20 +20,68 @@ pub struct Voxel {
 	pub z: u8,
 }
 
-pub struct Cube4<'a> {
-	hw: &'a mut Spidev,
+pub struct Cube4 {
+	// hw: &'a mut Spidev,
+	ledstring: ws2811::ws2811_t,
 
 	cube_frame: [Apa106Led; 64],
 }
 
-impl<'a> Cube4<'a> {
-	pub fn new(spi: &mut Spidev) -> Cube4 {
+impl Cube4 {
+	// pub fn new(spi: &mut Spidev) -> Cube4 {
+	pub fn new() -> Cube4 {
 		let blank_frame: [Apa106Led; 64] = [Apa106Led { red: 1, green: 0, blue: 0 }; 64];
 
-		Cube4 {
-			hw: spi,
+		unsafe {
+			// let hw = ws2811::rpi_hw_detect();
 
-			cube_frame: blank_frame
+			// let mut ledstring = ws2811::ws2811_t {
+			// 	freq: 800_000,
+			// 	dmanum: 5,
+			// 	device: &mut ws2811::ws2811_device { _unused: [] },
+			// 	rpi_hw: hw,
+			// 	render_wait_time: 100,
+
+			// 	channel: [
+			// 		ws2811::ws2811_channel_t {
+			// 			gpionum: 10,
+			// 			count: 64,
+			// 			invert: 0,
+			// 			brightness: 32,
+			// 			strip_type: (ws2811::WS2811_STRIP_RGB as i32),
+			// 			leds: ptr::null_mut(),
+			// 			wshift: 0,
+			// 			rshift: 0,
+			// 			gshift: 0,
+			// 			bshift: 0,
+			// 			gamma: ptr::null_mut(),
+			// 		},
+			// 		ws2811::ws2811_channel_t {
+			// 			gpionum: 0,
+			// 			count: 0,
+			// 			invert: 0,
+			// 			brightness: 0,
+			// 			strip_type: (ws2811::WS2811_STRIP_RGB as i32),
+			// 			leds: ptr::null_mut(),
+			// 			wshift: 0,
+			// 			rshift: 0,
+			// 			gshift: 0,
+			// 			bshift: 0,
+			// 			gamma: ptr::null_mut(),
+			// 		}
+			// 	]
+			// };
+
+			let mut ledstring = ws2811::get_strings();
+
+			ws2811::ws2811_init(&mut ledstring);
+
+			Cube4 {
+				// hw: spi,
+				ledstring: ledstring,
+
+				cube_frame: blank_frame
+			}
 		}
 	}
 
@@ -112,26 +162,60 @@ impl<'a> Cube4<'a> {
 
 	// #[inline(always)]
 	pub fn flush(&mut self) {
-		let mut bytes: Vec<u8> = self.cube_frame
+		// let mut bytes: Vec<u8> = self.cube_frame
+		// 	.into_iter()
+		// 	.map(|led| colour_to_raw_u32(led).into_iter().map(|byte| *byte).collect::<Vec<u8>>())
+		// 	.flat_map(|thing| thing)
+		// 	.collect();
+
+		let mut mapped: Vec<u32> = self.cube_frame
 			.into_iter()
-			.map(|led| colour_to_raw(led).into_iter().map(|byte| *byte).collect::<Vec<u8>>())
-			.flat_map(|thing| thing)
+			.map(|led| colour_to_raw_u32(led))
 			.collect();
 
-		let mut clear: Vec<u8> = (0..5000).map(|b| 0x00).collect();
+		self.ledstring.channel[0].leds = mapped.as_mut_ptr();
+
+		unsafe {
+			ws2811::ws2811_render(&mut self.ledstring);
+		}
+
+		// let mut clear: Vec<u8> = (0..5000).map(|b| 0x00).collect();
 
 		// self.hw.write(&clear.as_slice());
 		// thread::sleep(Duration::from_millis(100));
 
 		// self.hw.write(&clear.as_slice());
 
-		// thread::sleep(time::Duration::from_millis(200));		
-			
-		// self.hw.write(&bytes.as_slice());
-		self.hw.write(&bytes[0..(24 * 8)]);
+		// thread::sleep(time::Duration::from_millis(200));
 
-		thread::sleep(time::Duration::from_millis(200));
+		// self.hw.write(&bytes.as_slice());
+		// self.hw.write(&bytes[0..(24 * 8)]);
+
+		// thread::sleep(time::Duration::from_millis(200));
+
+
+
+		// ledstring.channel[0].leds = empty.as_mut_ptr();
+
+	    // ws2811::ws2811_render(&mut ledstring);
+
+		// ws2811::ws2811_fini(&mut ledstring);
 	}
+
+	pub fn close(&mut self) {
+		self.fill(Apa106Led { red: 0, green: 0, blue: 0 });
+
+		self.flush();
+
+		unsafe {
+			ws2811::ws2811_fini(&mut self.ledstring);
+		}
+	}
+}
+
+fn colour_to_raw_u32(input: &Apa106Led) -> u32 {
+	(((input.red as u32) << 16) | ((input.green as u32) << 8) | (input.blue as u32)) as u32
+
 }
 
 fn bit_is_set(byte: u8, bit_index: u8) -> bool {

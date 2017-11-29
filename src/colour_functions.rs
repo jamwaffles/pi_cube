@@ -1,4 +1,3 @@
-use tables::BLACKBODY_MAP;
 use apa106led::Apa106Led;
 
 pub fn rgb_wheel(wheelpos: u8) -> Apa106Led {
@@ -35,50 +34,50 @@ pub fn christmas_wheel(wheelpos: u8) -> Apa106Led {
 	}
 }
 
-pub fn temp_to_rgb(kelvin: u32) -> Apa106Led {
-	let interval = 20;
+// pub fn temp_to_rgb(kelvin: u32) -> Apa106Led {
+// 	let interval = 20;
 
-	// Clamp
-	let temp = if kelvin < 500 {
-		500
-	} else if kelvin > 16000 {
-		16000
-	} else {
-		kelvin
-	};
+// 	// Clamp
+// 	let temp = if kelvin < 500 {
+// 		500
+// 	} else if kelvin > 16000 {
+// 		16000
+// 	} else {
+// 		kelvin
+// 	};
 
-	let index = (temp - 500) / interval;
+// 	let index = (temp - 500) / interval;
 
-	BLACKBODY_MAP[index as usize]
+// 	BLACKBODY_MAP[index as usize]
 
-	// Round to nearest unit (in our case, 20)
-	// (n + 4) / 5 * 5
+// 	// Round to nearest unit (in our case, 20)
+// 	// (n + 4) / 5 * 5
 
-	// let nearest =
+// 	// let nearest =
 
-	// Actual good implementation using lots of intrinsics that isn't supported well/at all/something else on ARM CPUs
-	//
-	// let temp: f32 = kelvin as f32 / 100.0;
+// 	// Actual good implementation using lots of intrinsics that isn't supported well/at all/something else on ARM CPUs
+// 	//
+// 	// let temp: f32 = kelvin as f32 / 100.0;
 
-	// if temp <= 66.0 {
-	// 	Apa106Led {
-	// 		red: 255,
-	// 		green: clamp_to_u8(99.4708025861 * unsafe { intrinsics::logf32(temp) } - 161.1195681661),
-	// 		blue:
-	// 			if temp <= 19.0 {
-	// 				0
-	// 			} else {
-	// 				clamp_to_u8(138.5177312231 * unsafe { intrinsics::logf32(temp - 10.0) } - 305.0447927307)
-	// 			},
-	// 	}
-	// } else {
-	// 	Apa106Led {
-	// 		red: clamp_to_u8(329.698727446 * unsafe { intrinsics::powf32(temp - 60.0, -0.1332047592) }),
-	// 		green: clamp_to_u8(288.1221695283 * unsafe { intrinsics::powf32(temp - 60.0, -0.1332047592) }),
-	// 		blue: clamp_to_u8(255.0),
-	// 	}
-	// }
-}
+// 	// if temp <= 66.0 {
+// 	// 	Apa106Led {
+// 	// 		red: 255,
+// 	// 		green: clamp_to_u8(99.4708025861 * unsafe { intrinsics::logf32(temp) } - 161.1195681661),
+// 	// 		blue:
+// 	// 			if temp <= 19.0 {
+// 	// 				0
+// 	// 			} else {
+// 	// 				clamp_to_u8(138.5177312231 * unsafe { intrinsics::logf32(temp - 10.0) } - 305.0447927307)
+// 	// 			},
+// 	// 	}
+// 	// } else {
+// 	// 	Apa106Led {
+// 	// 		red: clamp_to_u8(329.698727446 * unsafe { intrinsics::powf32(temp - 60.0, -0.1332047592) }),
+// 	// 		green: clamp_to_u8(288.1221695283 * unsafe { intrinsics::powf32(temp - 60.0, -0.1332047592) }),
+// 	// 		blue: clamp_to_u8(255.0),
+// 	// 	}
+// 	// }
+// }
 
 pub fn fade(colour: Apa106Led, multiplier: f32) -> Apa106Led {
 	let divisor: u8 = (1.0 / multiplier) as u8;

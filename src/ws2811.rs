@@ -11,13 +11,6 @@ pub fn get_strings() -> ws2811_t {
 		let hw = rpi_hw_detect();
 
 		let mut rust_ledstring = ws2811_t {
-			// pub render_wait_time: u64,
-			// pub device: *mut ws2811_device,
-			// pub rpi_hw: *const rpi_hw_t,
-			// pub freq: u32,
-			// pub dmanum: ::std::os::raw::c_int,
-			// pub channel: [ws2811_channel_t; 2usize],
-
 			freq: 800_000,
 			dmanum: 5,
 			device: &mut ws2811_device { _unused: [] },
@@ -31,7 +24,7 @@ pub fn get_strings() -> ws2811_t {
 					invert: 0,
 					brightness: 32,
 					strip_type: (WS2811_STRIP_RGB as i32),
-					leds: &mut 0,
+					leds: ptr::null_mut(),
 					wshift: 0,
 					rshift: 0,
 					gshift: 0,
@@ -44,7 +37,7 @@ pub fn get_strings() -> ws2811_t {
 					invert: 0,
 					brightness: 0,
 					strip_type: (WS2811_STRIP_RGB as i32),
-					leds: &mut 0,
+					leds: ptr::null_mut(),
 					wshift: 0,
 					rshift: 0,
 					gshift: 0,
