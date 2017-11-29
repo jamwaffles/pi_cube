@@ -25,6 +25,7 @@ fn main() {
         .whitelisted_function("ws2811_init")
         .whitelisted_function("ws2811_render")
         .whitelisted_function("rpi_hw_detect")
+        .whitelisted_function("ws2811_fini")
 
         .clang_arg("-Iws2811")
         // Finish the builder and generate the bindings.
