@@ -26,7 +26,7 @@ pub fn get_strings() -> ws2811_t {
 
 			channel: [
 				ws2811_channel_t {
-					gpionum: 21,
+					gpionum: 10,
 					count: 64,
 					invert: 0,
 					brightness: 32,
