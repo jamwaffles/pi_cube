@@ -41,80 +41,7 @@ fn main() {
 fn run() {
 	println!("Started\r\n");
 
-	// let hw = ws2811::rpi_hw_t {
-	// 	pub type_: u32,
-	// 	pub hwver: u32,
-	// 	pub periph_base: u32,
-	// 	pub videocore_base: u32,
-	// 	pub desc: *mut ::std::os::raw::c_char,
-	// }
-
-	let mut foo = vec![
-		0x00201000u32,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-		0x00201000,
-	];
+	let mut foo: Vec<u32> = (1..64).map(|_| 0x00201000u32).collect();
 
 	let mut empty: Vec<u32> = (1..64).map(|_| 0x00000000u32).collect();
 
@@ -151,56 +78,6 @@ fn run() {
 
 		ws2811::ws2811_fini(&mut ledstring);
 	}
-
-	// unsafe {
-	// 	let hw = ws2811::rpi_hw_detect();
-
-	// 	let mut rust_ledstring = ws2811::ws2811_t {
-	// 		// pub render_wait_time: u64,
-	// 		// pub device: *mut ws2811_device,
-	// 		// pub rpi_hw: *const rpi_hw_t,
-	// 		// pub freq: u32,
-	// 		// pub dmanum: ::std::os::raw::c_int,
-	// 		// pub channel: [ws2811_channel_t; 2usize],
-
-	// 		freq: 800_000,
-	// 		dmanum: 5,
-	// 		device: &mut ws2811::ws2811_device { _unused: [] },
-	// 		rpi_hw: hw,
-	// 		render_wait_time: 0,
-
-	// 		channel: [
-	// 			ws2811::ws2811_channel_t {
-	// 				gpionum: 18,
-	// 				count: 256,
-	// 				invert: 0,
-	// 				brightness: 32,
-	// 				strip_type: (ws2811::WS2811_STRIP_RGB as i32),
-	// 				leds: &mut 0,
-	// 				wshift: 0,
-	// 				rshift: 0,
-	// 				gshift: 0,
-	// 				bshift: 0,
-	// 				gamma: &mut 0,
-	// 			},
-	// 			ws2811::ws2811_channel_t {
-	// 				gpionum: 0,
-	// 				count: 0,
-	// 				invert: 0,
-	// 				brightness: 0,
-	// 				strip_type: (ws2811::WS2811_STRIP_RGB as i32),
-	// 				leds: &mut 0,
-	// 				wshift: 0,
-	// 				rshift: 0,
-	// 				gshift: 0,
-	// 				bshift: 0,
-	// 				gamma: &mut 0,
-	// 			}
-	// 		]
-	// 	};
-
-	// 	ws2811::ws2811_init(&mut rust_ledstring);
-	// }
 
 	// let mut spi = create_spi().unwrap();
 
