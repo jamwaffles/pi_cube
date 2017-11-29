@@ -1,6 +1,9 @@
 extern crate spidev;
 extern crate rand;
+extern crate ctrlc;
 
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::io;
 use spidev::{ Spidev, SpidevOptions, SPI_MODE_0 };
 use std::{thread, time};
@@ -122,11 +125,25 @@ fn run() {
 
 		println!("{:?}", ledstring);
 
-		loop {
-			ledstring.channel[0].leds = foo.as_mut_ptr();
+		let running = Arc::new(AtomicBool::new(true));
+	    let r = running.clone();
+	    ctrlc::set_handler(move || {
+	        r.store(false, Ordering::SeqCst);
+	    }).expect("Error setting Ctrl-C handler");
 
-			ws2811::ws2811_render(&mut ledstring);
-		}
+	    println!("Waiting for Ctrl-C...");
+
+	    while running.load(Ordering::SeqCst) {
+	    	ledstring.channel[0].leds = foo.as_mut_ptr();
+
+	    	ws2811::ws2811_render(&mut ledstring);
+
+	    	thread::sleep(time::Duration::from_millis(200));
+	    }
+
+	    println!("Cleaning up...");
+
+		ws2811::ws2811_fini(&mut ledstring);
 	}
 
 	// unsafe {
