@@ -9,7 +9,6 @@ mod cube;
 mod apa106led;
 mod colour_functions;
 mod patterns;
-mod tables;
 
 use colour_functions::fade;
 use apa106led::{ WARM_WHITE, OFF };
