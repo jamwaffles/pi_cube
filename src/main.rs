@@ -40,6 +40,8 @@ fn main() {
 
 	let mut empty: Vec<u32> = (1..64).map(|_| 0x00000000u32).collect();
 
+	let raindrop_colour = fade(WARM_WHITE, MAX_BRIGHTNESS as f32 / 255.0);
+
 	unsafe {
 		// let mut ledstring = ws2811::get_strings();
 
@@ -70,7 +72,6 @@ fn main() {
 		cube.fill(OFF);
 
 		cube.flush();
-		thread::sleep(time::Duration::from_millis(1));
 
 	    while running.load(Ordering::SeqCst) {
 	    	// Rainbow
@@ -79,19 +80,19 @@ fn main() {
 	    	}
 
 	    	// Fadey slices thing
-	    	// for _ in 0..4 {
-	    	// 	patterns::animated_slices(&mut cube);
-	    	// }
+	    	for _ in 0..4 {
+	    		patterns::animated_slices(&mut cube);
+	    	}
 
-	    	// // Rain
-	    	// for _ in 0..16 {
-	    	// 	patterns::rain(&mut cube, raindrop_colour);
-	    	// }
+	    	// Rain
+	    	for _ in 0..16 {
+	    		patterns::rain(&mut cube, raindrop_colour);
+	    	}
 
-	    	// // Blender
-	    	// for _ in 0..16 {
-	    	// 	patterns::blender(&mut cube, raindrop_colour);
-	    	// }
+	    	// Blender
+	    	for _ in 0..16 {
+	    		patterns::blender(&mut cube, raindrop_colour);
+	    	}
 	    }
 
 	    println!("Cleaning up...");
