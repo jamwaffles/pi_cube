@@ -17,16 +17,20 @@ pub struct Cube4<'a> {
 	spi: &'a mut Spidev,
 
 	cube_frame: [Apa106Led; 64],
+
+	max_brightness: u8,
 }
 
 impl<'a> Cube4<'a> {
-	pub fn new(spi: &mut Spidev) -> Cube4 {
+	pub fn new(spi: &mut Spidev, max_brightness: u8) -> Cube4 {
 		let blank_frame: [Apa106Led; 64] = [Apa106Led { red: 1, green: 0, blue: 0 }; 64];
 
 		Cube4 {
 			spi: spi,
 
-			cube_frame: blank_frame
+			cube_frame: blank_frame,
+
+			max_brightness,
 		}
 	}
 
@@ -108,10 +112,17 @@ impl<'a> Cube4<'a> {
 	pub fn flush(&mut self) {
 		let mut bytes: Vec<u8> = self.cube_frame
 			.into_iter()
-			.map(|led| colour_to_raw(led).into_iter().map(|byte| *byte).collect::<Vec<u8>>())
+			.map(|led| {
+				Apa106Led {
+					red: (led.red as f32 * self.max_brightness as f32 / 255.0) as u8,
+					green: (led.green as f32 * self.max_brightness as f32 / 255.0) as u8,
+					blue: (led.blue as f32 * self.max_brightness as f32 / 255.0) as u8,
+				}
+			})
+			.map(|led| colour_to_raw(&led).into_iter().map(|byte| *byte).collect::<Vec<u8>>())
 			.flat_map(|thing| thing)
 			.collect();
-			
+
 		self.spi.write(&bytes.as_slice());
 	}
 }

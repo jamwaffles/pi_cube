@@ -14,7 +14,6 @@ mod tables;
 use colour_functions::fade;
 use apa106led::{ WARM_WHITE, OFF };
 use cube::{ Cube4 };
-use patterns::{ MAX_BRIGHTNESS };
 
 fn create_spi() -> io::Result<Spidev> {
 	let mut spi = try!(Spidev::open("/dev/spidev0.0"));
@@ -37,14 +36,13 @@ fn run() {
 
 	let mut spi = create_spi().unwrap();
 
-	let mut cube = Cube4::new(&mut spi);
+	let mut cube = Cube4::new(&mut spi, 25);
 
 	cube.fill(OFF);
 
 	cube.flush();
-	thread::sleep(time::Duration::from_millis(1));
 
-	let raindrop_colour = fade(WARM_WHITE, MAX_BRIGHTNESS as f32 / 255.0);
+	let raindrop_colour = WARM_WHITE;
 
 	loop {
 		// Rainbow

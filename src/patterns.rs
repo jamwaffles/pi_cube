@@ -5,8 +5,6 @@ use apa106led::{ Apa106Led, OFF };
 use cube::{ Cube4, Voxel };
 use rand::{ self, Rng };
 
-pub const MAX_BRIGHTNESS: u8 = 25;
-
 pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 	let wait = time::Duration::from_millis(120);
 
@@ -49,7 +47,7 @@ pub fn christmas_rainbow(cube: &mut Cube4) {
 
 			let wheel_col = christmas_wheel(pos as u8);
 
-			cube.set_at_index(index as usize, fade(wheel_col, (MAX_BRIGHTNESS as f32 / 255.0)));
+			cube.set_at_index(index as usize, wheel_col);
 		}
 
 		cube.flush();
@@ -59,11 +57,11 @@ pub fn christmas_rainbow(cube: &mut Cube4) {
 }
 
 pub fn animated_slices(cube: &mut Cube4) {
-	let frame_time = time::Duration::from_millis(40);
+	let frame_time = time::Duration::from_millis(2);
 
 	// Fade red panels up
 	for panel in 0..4 {
-		for i in 0..MAX_BRIGHTNESS {
+		for i in 0..255 {
 			cube.fill_panel(panel, Apa106Led { red: i, green: 0, blue: 0 });
 
 			cube.flush();
@@ -73,7 +71,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 	}
 
 	// Fade all that shit out
-	for i in (0..MAX_BRIGHTNESS).rev() {
+	for i in (0..255).rev() {
 		for panel in 0..4 {
 			cube.fill_panel(panel, Apa106Led { red: i, green: 0, blue: 0 });
 		}
@@ -85,7 +83,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 	// Fade green slices up
 	for slice in 0..4 {
-		for i in 0..MAX_BRIGHTNESS {
+		for i in 0..255 {
 			cube.fill_slice(slice, Apa106Led { red: 0, green: i, blue: 0 });
 
 			cube.flush();
@@ -95,7 +93,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 	}
 
 	// Fade all that shit out
-	for i in (0..MAX_BRIGHTNESS).rev() {
+	for i in (0..255).rev() {
 		for slice in 0..4 {
 			cube.fill_slice(slice, Apa106Led { red: 0, green: i, blue: 0 });
 		}
@@ -107,7 +105,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 
 	// Fade white layers  up
 	for layer in (0..4).rev() {
-		for i in 0..MAX_BRIGHTNESS {
+		for i in 0..255 {
 			cube.fill_layer(layer, Apa106Led { red: i, green: i, blue: i });
 
 			cube.flush();
@@ -117,7 +115,7 @@ pub fn animated_slices(cube: &mut Cube4) {
 	}
 
 	// Fade all that shit out
-	for i in (0..MAX_BRIGHTNESS).rev() {
+	for i in (0..255).rev() {
 		for layer in 0..4 {
 			cube.fill_layer(layer, Apa106Led { red: i, green: i, blue: i });
 		}
