@@ -1,6 +1,6 @@
 use std::{thread, time};
 
-use colour_functions::{ christmas_wheel, fade };
+use colour_functions::{ christmas_wheel };
 use apa106led::{ Apa106Led, OFF };
 use cube::{ Cube4, Voxel };
 use rand::{ self, Rng };

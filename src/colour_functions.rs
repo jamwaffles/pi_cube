@@ -1,5 +1,6 @@
 use apa106led::Apa106Led;
 
+#[allow(dead_code)]
 pub fn rgb_wheel(wheelpos: u8) -> Apa106Led {
 	let mut thingy = wheelpos;
 
@@ -34,6 +35,7 @@ pub fn christmas_wheel(wheelpos: u8) -> Apa106Led {
 	}
 }
 
+#[allow(dead_code)]
 pub fn temp_to_rgb(kelvin: u32) -> Apa106Led {
 	let temp = kelvin as f32 / 100.0;
 
@@ -73,6 +75,7 @@ pub fn temp_to_rgb(kelvin: u32) -> Apa106Led {
 	Apa106Led { red, green, blue }
 }
 
+#[allow(dead_code)]
 pub fn fade(colour: Apa106Led, multiplier: f32) -> Apa106Led {
 	let divisor: u8 = (1.0 / multiplier) as u8;
 

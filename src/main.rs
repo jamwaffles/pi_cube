@@ -3,14 +3,12 @@ extern crate rand;
 
 use std::io;
 use spidev::{ Spidev, SpidevOptions, SPI_MODE_0 };
-use std::{thread, time};
 
 mod cube;
 mod apa106led;
 mod colour_functions;
 mod patterns;
 
-use colour_functions::fade;
 use apa106led::{ WARM_WHITE, OFF };
 use cube::{ Cube4 };
 
@@ -28,7 +26,6 @@ fn create_spi() -> io::Result<Spidev> {
 fn main() {
 	run();
 }
-
 
 fn run() {
 	println!("Started\r\n");

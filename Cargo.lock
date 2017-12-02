@@ -1,4 +1,4 @@
-[root]
+[[package]]
 name = "apa106_spi"
 version = "0.1.0"
 dependencies = [
