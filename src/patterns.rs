@@ -1,9 +1,50 @@
 use std::{thread, time};
+use num::clamp;
 
-use colour_functions::{ christmas_wheel };
+use colour_functions::{ christmas_wheel, temp_to_rgb };
 use apa106led::{ Apa106Led, OFF };
 use cube::{ Cube4, Voxel };
 use rand::{ self, Rng };
+
+pub fn fire(cube: &mut Cube4) {
+	let mut temps = [ [ [ 0i32; 4 ]; 4 ]; 4 ];
+	let start: u32 = 1600;
+	let cooling: i32 = 1600 as i32 / 4;
+
+	for x in 0..4 {
+		for y in 0..4 {
+			// Start temp in kelvin
+			temps[x][y][0] = rand::thread_rng().gen_range(start as i32 - 100, start as i32 + 100);
+
+			cube.set_at_coord(Voxel { x: x as u8, y: y as u8, z: 0 }, temp_to_rgb(temps[x][y][0] as u32));
+		}
+	}
+
+	// cube.flush();
+
+	for iter in 0..32767 {
+		for x in 0..4 {
+			for y in 0..4 {
+				for z in (1..4).rev() {
+					temps[x][y][z] = clamp(temps[x][y][z - 1] - cooling, 0, start as i32);
+
+					cube.set_at_coord(Voxel { x: x as u8, y: y as u8, z: z as u8 }, temp_to_rgb(temps[x][y][z] as u32));
+				}
+
+				// if iter % 20 == 0 {
+					temps[x][y][0] = rand::thread_rng().gen_range(start as i32 - 500, start as i32 + 500);
+				// }
+
+				cube.set_at_coord(Voxel { x: x as u8, y: y as u8, z: 0 }, temp_to_rgb(temps[x][y][0] as u32));
+			}
+		}
+
+		cube.flush();
+
+		thread::sleep(time::Duration::from_millis(100));
+	}
+
+}
 
 pub fn rain(cube: &mut Cube4, raindrop_colour: Apa106Led) {
 	let wait = time::Duration::from_millis(120);
