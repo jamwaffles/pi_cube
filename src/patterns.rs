@@ -29,7 +29,7 @@ pub fn fire(cube: &mut Cube4) {
 
     // cube.flush();
 
-    for iter in 0..32767 {
+    for _ in 0..32767 {
         for x in 0..4 {
             for y in 0..4 {
                 for z in (1..4).rev() {

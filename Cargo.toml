@@ -2,7 +2,7 @@
 authors = ["pi"]
 name = "apa106_spi"
 version = "0.1.0"
-
 [dependencies]
+num = "0.1.42"
 rand = "0.3.16"
 spidev = "0.3.0"
